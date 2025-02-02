@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eamora-EmersonChan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-image: url('https://files.catbox.moe/clsdvp.png'); /* 替换为新的背景图链接 */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* 固定背景 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background 0.5s ease; /* 背景过渡动画 */
+        }
+        /* 卡片容器样式 */
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        /* 卡片样式 */
+        .card {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* 添加简单的过渡效果 */
+        }
+        .card:hover{
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        /* 卡片头部样式 */
+        .card-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid #eee;
+            transition: transform 0.3s ease; /* 添加简单的过渡效果 */
+        }
+        .profile-image:hover {
+             transform: scale(1.1);
+        }
+        .profile-name {
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+            color: #333;
+            transition: color 0.3s ease; /* 添加简单的过渡效果 */
+        }
+        .profile-name:hover {
+            color: #0056b3;
+        }
+        .profile-title {
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 1.3rem;
+            color: #555;
+            transition: color 0.3s, transform 0.3s ease;
+        }
+        .social-links a:hover {
+            color: #007bff;
+            transform: translateY(-3px);
+        }
+        /* 卡片主体样式 */
+        .card-body {
+            padding: 20px 0;
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        /* 卡片按钮样式 */
+        .card-button {
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+           border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+             width: calc(50% - 10px);
+             text-decoration: none;
+        }
+        .card-button i {
+            margin-right: 5px; /* 按钮图标间距 */
+        }
+        .card-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        /* 卡片底部样式 */
+        .card-footer {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            color: #555;
+        }
+        /* 模态框样式 */
+       .modal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+             display: none;
+        }
+        .modal-content {
+            background: rgba(255, 255, 255, 0.4);
+             backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            width: 700px;
+            max-width: 90%;
+            position: relative;
+             animation: modalFadeIn 0.3s ease;
+        }
+         @keyframes modalFadeIn {
+                from{
+                   opacity: 0;
+                   transform: scale(0.9);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+         @keyframes modalFadeOut {
+                from{
+                   opacity: 1;
+                   transform: scale(1);
+                }
+                to {
+                    opacity: 0;
+                    transform: scale(0.9);
+                }
+            }
+         .modal-container.hide {
+             display: flex;
+              animation: modalFadeOut 0.3s ease forwards;
+         }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+         .close-button:hover {
+           color: #007bff;
+        }
+        .modal-body {
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        /* 技能列表样式 */
+        .skill-list {
+            list-style: none;
+            padding: 0;
+        }
+        .skill-list li {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .skill-name {
+            display: inline-block;
+            width: 20%;
+            font-weight: bold;
+        }
+        .skill-level {
+            display: inline-block;
+            width: 10%;
+            text-align: right;
+            color: #777;
+        }
+        .skill-bar {
+             display: inline-block;
+             width: 65%;
+            height: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            overflow: hidden;
+            vertical-align: middle;
+            position: relative;
+             --progress-width: 0%;
+             --progress-background: #ccc;
+        }
+        .skill-bar .progress-bar{
+            display: block;
+            height: 100%;
+             transition: width 0.5s ease;
+             border-radius: 5px;
+            }
+        /* 项目列表样式 */
+        .project-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .project-item {
+            width: calc(30% - 20px);
+            margin: 10px;
+            text-align: center;
+             background-color: #f9f9f9;
+            padding:10px;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: transform 0.3s ease , box-shadow 0.3s ease;
+        }
+        .project-item:hover{
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .project-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            object-fit: cover;
+           max-height: 150px;
+        }
+         .project-link {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+             text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s ease;
+         }
+        .project-link:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+         }
+        /* 联系方式列表 */
+        .contact-list {
+             list-style: none;
+             padding: 0;
+        }
+         .contact-list li {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+             display: flex;
+             align-items: center;
+        }
+        .contact-list li i {
+            margin-right: 8px;
+        }
+        .contact-list li a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+        .contact-list li a:hover {
+            text-decoration: underline;
+            color: #0056b3;
+        }
+        /* 响应式 */
+        @media screen and (max-width: 768px) {
+            .card {
+               padding: 20px;
+              width: 90%;
+            }
+             .modal-content{
+                width: 90%;
+             }
+             .card-button {
+                width: calc(100% - 10px);
+            }
+            .project-item {
+             width: calc(50% - 20px);
+           }
+        }
+         @media screen and (max-width: 500px)
+         {
+             .project-item {
+                 width: calc(100% - 20px);
+             }
+         }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card">
+            <div class="card-header">
+                <img src="https://files.catbox.moe/4u07u2.png" alt="你的头像" class="profile-image">
+                <h1 class="profile-name">[Emersonchan]</h1>
+                <p class="profile-title">你的职位或标签</p>
+                <div class="social-links">
+                    <a href="https://github.com/EmersonCh1458" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://t.me/EiChens_Bot" target="_blank" title="telegram bot"><i class="fab fa-telegram"></i></a>
+                    <a href="mailto:feizhaiaf@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                    <!-- 添加其他社交媒体链接 -->
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="button-group">
+                    <a href="test.eamora.eu.org/about" class="card-button" target="_blank">
+                        <i class="fas fa-user"></i> 关于我
+                    </a>
+                    <a href="test.eamora.eu.org" class="card-button" target="_blank">
+                        <i class="fas fa-code"></i> 博客
+                    </a>
+                    <a href="你的项目页面链接.html" class="card-button" target="_blank">
+                        <i class="fas fa-project-diagram"></i> 我的项目
+                    </a>
+                    <a href="mailto:feizhaiaf@gmail.com" class="card-button">
+                        <i class="fas fa-envelope-open-text"></i> 联系我
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer">
+                &copy; [2025] [EmersonChan]. All Rights Reserved.
+            </div>
+        </div>
+    </div>
+    <div class="modal-container" id="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-body" id="modal-body">
+              </div>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('modal');
+            const closeButton = document.querySelector('.close-button');
+             modal.style.display = 'none';
+            // 关闭按钮点击事件
+            closeButton.addEventListener('click', function() {
+                 modal.classList.add('hide');
+                   setTimeout(() => {
+                        modal.style.display = 'none';
+                    }, 300);
+            });
+            // 模态框外部点击事件（点击遮罩层关闭模态框）
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                     modal.classList.add('hide');
+                     setTimeout(() => {
+                        modal.style.display = 'none';
+                    }, 300);
+                }
+            });
+    });
+    </script>
+</body>
+</html>
