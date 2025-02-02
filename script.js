@@ -19,6 +19,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let obstacleFrequency = 0.03;
     let surferGravity = 1;
     let surferJumpSpeed = 12;
+    let canvasWidth = 800;
+    let canvasHeight = 400;
+    if (window.innerWidth <= 768) {
+        canvasWidth = 350;
+        canvasHeight = 200;
+        gameCanvas.width = canvasWidth;
+        gameCanvas.height = canvasHeight;
+    }
+
 
     backgroundMusic.play(); // 游戏开始时播放背景音乐
 
@@ -27,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         backgroundMusic.pause();
     });
     closeSettingsButton.addEventListener('click', function() {
-         settingsModal.style.display = 'none';
+        settingsModal.style.display = 'none';
         backgroundMusic.play();
     });
     saveSettingsButton.addEventListener('click', function(){
@@ -78,10 +87,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     class Surfer {
         constructor() {
-            this.x = 50;
-            this.y = gameCanvas.height - 50;
-            this.width = 30;
-            this.height = 50;
+           this.width = 20;
+            this.height = 35;
+            if (window.innerWidth <= 768) {
+                this.x = 25;
+                this.y = canvasHeight - this.height;
+            }else{
+                this.x = 50;
+                this.y = canvasHeight - 50;
+            }
             this.velocityY = 0;
             this.gravity = surferGravity;
             this.jumpSpeed = surferJumpSpeed;
@@ -101,8 +115,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         draw() {
-                ctx.fillStyle = 'skyblue';
-                ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.fillStyle = 'skyblue';
+            ctx.fillRect(this.x, this.y, this.width, this.height);
         }
         collidesWith(obstacle) {
             return this.x < obstacle.x + obstacle.width &&
@@ -114,28 +128,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
     class Obstacle {
         constructor() {
-            this.width = 20;
-            this.height = 30 + Math.random() * 30;
-            this.x = gameCanvas.width;
-             this.y = gameCanvas.height - this.height;
-           this.speed = gameSpeed;
+            this.width = 15;
+             this.height = 20 + Math.random() * 20;
+            this.x = canvasWidth;
+            this.y = gameCanvas.height - this.height;
+            this.speed = gameSpeed;
         }
         update() {
-           this.x -= this.speed;
+            this.x -= this.speed;
         }
         draw() {
-              ctx.fillStyle = 'red';
-                ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     }
 
     //事件监听器
-     document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function(event) {
         if (event.code === 'Space' && gameRunning ) {
             surfer.jump();
         }
+    });
+    gameCanvas.addEventListener('touchstart', function(event) {
+         if(gameRunning) {
+             surfer.jump();
+         }
+        event.preventDefault();
     });
 
     restartButton.addEventListener('click', initializeGame);
     initializeGame();  // 启动游戏
 });
+
