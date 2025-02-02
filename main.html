@@ -382,5 +382,44 @@
             });
     });
     </script>
+    </div>
+<div class="modal-container" id="settings-modal">
+    <div class="modal-content">
+        <span class="close-button" id="close-settings-button">&times;</span>
+        <div class="modal-body">
+            <h2>游戏设置</h2>
+            <div class="settings-group">
+                <label for="game-speed-input">游戏速度:</label>
+                <input type="number" id="game-speed-input" min="1" value="2">
+            </div>
+            <div class="settings-group">
+                <label for="obstacle-frequency-input">障碍物频率:</label>
+                <input type="number" id="obstacle-frequency-input" min="0" max="1" step="0.01" value="0.03">
+            </div>
+            <div class="settings-group">
+                <label for="surfer-gravity-input">冲浪者重力:</label>
+                  <input type="number" id="surfer-gravity-input" min="0.1" step="0.1" value="1">
+            </div>
+             <div class="settings-group">
+                <label for="surfer-jump-input">冲浪者跳跃:</label>
+                <input type="number" id="surfer-jump-input" min="1" value="12">
+            </div>
+             <button id="save-settings-button">保存设置</button>
+        </div>
+    </div>
+</div>
+</div>
+<div id="game-wrapper" class="game-wrapper hidden">
+    <div class="game-container">
+        <div class="game-header">
+         <button id="open-settings-button" class="settings-button">
+           <i class="fas fa-cog"></i> 设置
+         </button>
+       </div>
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <button id="restart-button" class="hidden">重新开始</button>
+    </div>
+</div>
+
 </body>
 </html>
